@@ -34,9 +34,9 @@ const Button = styled.button<PropsBadge>`
     cursor: pointer;
     width: 100%;
     
-    color: ${props => props.active ? "#fff" : "#555"};   
-    background-color: ${props => props.active ? props.color : "#ccc"};
-    border: ${props => props.active ? props.color : "#ccc"};
+    color: ${props => props.active ? "#fff" : "#686667"};   
+    background-color: ${props => props.active ? props.color : "#d1cccd"};
+    border: ${props => props.active ? props.color : "#d1cccd"};
 `
 
 export default function Badge(props: PropsBadge) {
