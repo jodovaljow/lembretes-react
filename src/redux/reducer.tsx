@@ -1,37 +1,20 @@
-import { faCalendarAlt, faCalendarCheck, faInbox } from '@fortawesome/free-solid-svg-icons'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { PropsBadge } from '../components/Badge'
+import { getTasksFilter, TypesTasksFilter } from '../core/task-query';
 
-const initialState: PropsBadge[] = [
-    {
-        name: "Hoje",
-        active: true,
-        color: "#047aff",
-        icon: faCalendarCheck,
-        count: 123,
-    },
-    {
-        name: "Programados",
-        active: false,
-        color: "#ff3c2f",
-        icon: faCalendarAlt,
-        count: 123,
-    },
-    {
-        name: "Todos",
-        active: false,
-        color: "#5b626a",
-        icon: faInbox,
-        count: 123,
-    },
-]
+const initialState = getTasksFilter()
 
 export const menuSlice = createSlice({
     name: 'menu',
     initialState,
     reducers: {
-        select: (state, action: PayloadAction<string>) => state.map(badge => ({ ...badge, active: badge.name === action.payload }))
+        select: (state, action: PayloadAction<TypesTasksFilter>) => getTasksFilter().map(taskFilter => {
+
+            return {
+                filter: { ...taskFilter.filter, active: action.payload === taskFilter.filter.name, count: taskFilter.tasks.length },
+                tasks: taskFilter.tasks,
+            }
+        }),
     }
 })
 

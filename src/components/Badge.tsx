@@ -2,6 +2,8 @@ import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
+import { TypesTasksFilter } from "../core/task-query";
+
 const Icon = styled.span<PropsIconBadge>`
     background-color: ${props => props.active ? "#fff" : props.color};
     color: ${props => props.active ? props.color : "#fff"};
@@ -55,7 +57,7 @@ export default function Badge(props: PropsBadge) {
 }
 
 export interface PropsBadge {
-    name: string
+    name: TypesTasksFilter
     count: number
     color: string
     active: boolean

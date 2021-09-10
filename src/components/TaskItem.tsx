@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faCircle } from "@fortawesome/free-regular-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+
+import { useAppDispatch as UseAppDispatch, useAppSelector, } from "../redux/hooks";
 import { dateIsPast } from "../core/date-utils";
+import { delTask, Task } from "../core/task-query";
+import { select } from "../redux/reducer";
 
 const Container = styled.div`
     display: flex;
@@ -19,6 +24,11 @@ const Checkbox = styled.span`
 const Content = styled.div`
     border-bottom: 1.5px solid #dddddd;
     flex: 1;
+    display: flex;
+`;
+
+const ContentNameDate = styled.div`
+    flex: 1;
 `;
 
 const Name = styled.p`
@@ -33,7 +43,21 @@ const DateField = styled.p<{ inPast: boolean }>`
     margin-bottom: 1rem;
 `;
 
+const ButtonDel = styled.button`
+    margin: 0.6rem;
+    font-size: 1.2rem;
+    background-color: #fff;
+    color: #ff3c2f;
+    border: none;
+    cursor: pointer;
+`;
+
 export default function TaskItem(task: Task) {
+
+    const menuOptions = useAppSelector(state => state.menuOptions)
+    const dispatch = UseAppDispatch()
+
+    const activedBadge = menuOptions.find(taskFilter => taskFilter.filter.active)
 
     function formatDate() {
 
@@ -51,6 +75,14 @@ export default function TaskItem(task: Task) {
         );
     }
 
+    function onDellTask(task: Task) {
+
+        delTask(task)
+
+        if (activedBadge)
+            dispatch(select(activedBadge.filter.name))
+    }
+
     return <Container>
 
         <Checkbox>
@@ -58,15 +90,16 @@ export default function TaskItem(task: Task) {
             <FontAwesomeIcon icon={task.done ? faCheckCircle : faCircle} />
         </Checkbox>
         <Content>
-            <Name>{task.name}</Name>
-            {task.date && <DateField inPast={dateIsPast(task.date)}>{formatDate()}</DateField>}
+            <ContentNameDate>
+
+                <Name>{task.name}</Name>
+                {task.date && <DateField inPast={dateIsPast(task.date)}>{formatDate()}</DateField>}
+            </ContentNameDate>
+
+            <ButtonDel onClick={() => onDellTask(task)}>
+
+                <FontAwesomeIcon icon={faTrash} />
+            </ButtonDel>
         </Content>
     </Container>
-}
-
-export interface Task {
-    id: string
-    done: boolean
-    name: string
-    date?: string | null
 }
