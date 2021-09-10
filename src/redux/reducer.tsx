@@ -17,7 +17,7 @@ export const menuSlice = createSlice({
                 tasksFilter: applicationState.tasksFilter.map(taskFilter => {
 
                     return {
-                        filter: { ...taskFilter.filter, active: action.payload === taskFilter.filter.name, count: taskFilter.tasks.length },
+                        filter: { ...taskFilter.filter, active: action.payload === taskFilter.filter.name},
                         tasks: taskFilter.tasks,
                     }
                 }),

@@ -31,7 +31,7 @@ export default function Menu() {
 
         return {
             ...tasksFilter.filter,
-            count: tasksFilter.tasks.length
+            count: tasksFilter.tasks.reduce((prev, task) => task.done ? prev : prev + 1, 0)
         }
     }
 
