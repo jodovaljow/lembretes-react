@@ -9,7 +9,8 @@ const Icon = styled.span<PropsIconBadge>`
     color: ${props => props.active ? props.color : "#fff"};
     border-radius: 50%;
     margin-right: 1em;
-    padding: 0.4rem
+    padding: 0.4rem;
+    display: inline-flex;
 `;
 
 const Count = styled.h2`
