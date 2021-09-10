@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faCircle } from "@fortawesome/free-regular-svg-icons";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Popover, } from 'antd';
+import { MenuOutlined } from '@ant-design/icons';
 
 import { useAppDispatch as UseAppDispatch, useAppSelector, } from "../redux/hooks";
 import { dateIsPast } from "../core/date-utils";
 import { delTask, editTask, Task } from "../core/task-query";
-import { select } from "../redux/reducer";
+import { operation, select } from "../redux/reducer";
 
 const Container = styled.div`
     display: flex;
@@ -24,6 +26,7 @@ const Checkbox = styled.span`
 const Content = styled.div`
     border-bottom: 1.5px solid #dddddd;
     flex: 1;
+    align-items: center;
     display: flex;
 `;
 
@@ -43,11 +46,29 @@ const DateField = styled.p<{ inPast: boolean }>`
     margin-bottom: 1rem;
 `;
 
+const ButtonEdit = styled.button`
+    margin: 0.6rem;
+    font-size: 1.2rem;
+    background-color: #fff;
+    color: #047aff;
+    border: none;
+    cursor: pointer;
+`;
+
 const ButtonDel = styled.button`
     margin: 0.6rem;
     font-size: 1.2rem;
     background-color: #fff;
     color: #ff3c2f;
+    border: none;
+    cursor: pointer;
+`;
+
+const ButtonMenu = styled.button`
+    margin: 0.6rem;
+    font-size: 1.2rem;
+    background-color: #fff;
+    color: #686667;
     border: none;
     cursor: pointer;
 `;
@@ -83,6 +104,11 @@ export default function TaskItem(task: Task) {
             dispatch(select(activedBadge.filter.name))
     }
 
+    function onEditTask() {
+
+        dispatch(operation({ type: 'editing', id: task.id }))
+    }
+
     function onCheckTask() {
 
         editTask({ ...task, done: !task.done })
@@ -90,6 +116,20 @@ export default function TaskItem(task: Task) {
         if (activedBadge)
             dispatch(select(activedBadge.filter.name))
     }
+
+    const menu = (
+        <>
+            <ButtonDel onClick={onDellTask}>
+
+                <FontAwesomeIcon icon={faTrash} />
+            </ButtonDel>
+
+            <ButtonEdit onClick={onEditTask}>
+
+                <FontAwesomeIcon icon={faPencilAlt} />
+            </ButtonEdit>
+        </>
+    );
 
     return <Container>
 
@@ -104,10 +144,13 @@ export default function TaskItem(task: Task) {
                 {task.date && <DateField inPast={dateIsPast(task.date)}>{formatDate()}</DateField>}
             </ContentNameDate>
 
-            <ButtonDel onClick={onDellTask}>
+            <Popover placement="leftTop" content={menu} trigger="click" >
 
-                <FontAwesomeIcon icon={faTrash} />
-            </ButtonDel>
+                <ButtonMenu>
+
+                    <MenuOutlined />
+                </ButtonMenu>
+            </Popover>
         </Content>
     </Container>
 }

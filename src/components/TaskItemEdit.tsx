@@ -91,7 +91,7 @@ export default function TaskItemEdit(props: Task) {
 
         if (task.id) {
 
-            editTask({ ...task, id: uuidv4() })
+            editTask(task)
         }
         else {
 

@@ -41,7 +41,7 @@ export default function TaskList() {
 
     function onAddTask(type: TypesTasksFilter) {
 
-        dispatch(operation('adding'))
+        dispatch(operation({ type: 'adding' }))
     }
 
     return <>
@@ -49,16 +49,26 @@ export default function TaskList() {
 
             <Container>
 
-                {activedBadge.tasks.map((taskItem, index) => <TaskItem key={index} {...taskItem}></TaskItem>)}
+                {activedBadge.tasks.map((taskItem, index) => {
 
-                {applicationState.operation === 'init' &&
+                    if (applicationState.operation.type === 'editing' && applicationState.operation.id === taskItem.id) {
+
+
+                        return <TaskItemEdit key={taskItem.id} {...taskItem}></TaskItemEdit>
+                    }
+
+                    return <TaskItem key={taskItem.id} {...taskItem}></TaskItem>
+                }
+                )}
+
+                {applicationState.operation.type === 'init' &&
                     <ButtonAdd onClick={() => onAddTask(activedBadge?.filter.name)}>
 
                         <FontAwesomeIcon icon={faPlusCircle} />
                     </ButtonAdd>
                 }
 
-                {applicationState.operation === 'adding' && <TaskItemEdit {...newTask}></TaskItemEdit>}
+                {applicationState.operation.type === 'adding' && <TaskItemEdit {...newTask}></TaskItemEdit>}
             </Container>
             :
             <p>...</p>}

@@ -18,7 +18,7 @@ function getTasks(): Task[] {
 export function getApplicationStateInit(): ApplicationState {
 
     return {
-        operation: 'init',
+        operation: { type: 'init' },
         tasksFilter: getTasksFilter(),
     }
 }
@@ -109,4 +109,4 @@ export interface TasksFilter {
 }
 
 export type TypesTasksFilter = 'Hoje' | 'Programados' | 'Todos'
-export type TypesOperation = 'init' | 'editing' | 'adding'
+export type TypesOperation = { type: 'init' } | { type: 'editing', id: string } | { type: 'adding' }
