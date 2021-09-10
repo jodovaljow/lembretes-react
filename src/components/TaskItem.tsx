@@ -5,7 +5,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch as UseAppDispatch, useAppSelector, } from "../redux/hooks";
 import { dateIsPast } from "../core/date-utils";
-import { delTask, Task } from "../core/task-query";
+import { delTask, editTask, Task } from "../core/task-query";
 import { select } from "../redux/reducer";
 
 const Container = styled.div`
@@ -75,7 +75,7 @@ export default function TaskItem(task: Task) {
         );
     }
 
-    function onDellTask(task: Task) {
+    function onDellTask() {
 
         delTask(task)
 
@@ -83,9 +83,17 @@ export default function TaskItem(task: Task) {
             dispatch(select(activedBadge.filter.name))
     }
 
+    function onCheckTask() {
+
+        editTask({ ...task, done: !task.done })
+
+        if (activedBadge)
+            dispatch(select(activedBadge.filter.name))
+    }
+
     return <Container>
 
-        <Checkbox>
+        <Checkbox onClick={onCheckTask}>
 
             <FontAwesomeIcon icon={task.done ? faCheckCircle : faCircle} />
         </Checkbox>
@@ -96,7 +104,7 @@ export default function TaskItem(task: Task) {
                 {task.date && <DateField inPast={dateIsPast(task.date)}>{formatDate()}</DateField>}
             </ContentNameDate>
 
-            <ButtonDel onClick={() => onDellTask(task)}>
+            <ButtonDel onClick={onDellTask}>
 
                 <FontAwesomeIcon icon={faTrash} />
             </ButtonDel>
