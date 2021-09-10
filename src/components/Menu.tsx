@@ -19,7 +19,7 @@ const Item = styled.div`
 
 export default function Menu() {
 
-    const menuOptions = useAppSelector(state => state.menuOptions)
+    const applicationState = useAppSelector(state => state.applicationState)
     const dispatch = useAppDispatch()
 
     function onSelectMenuOption(typesTasksFilter: TypesTasksFilter) {
@@ -36,7 +36,7 @@ export default function Menu() {
     }
 
     return <Container>
-        {menuOptions.map((menuOption, index) =>
+        {applicationState.tasksFilter.map((menuOption, index) =>
             <Item key={index} onClick={() => onSelectMenuOption(menuOption.filter.name)}>
                 <Badge {...getPropsBadge(menuOption)}></Badge>
             </Item>)}

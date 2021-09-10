@@ -4,7 +4,7 @@ import menuReducer from './reducer'
 
 const store = configureStore({
     reducer: {
-        menuOptions: menuReducer,
+        applicationState: menuReducer,
     }
 })
 

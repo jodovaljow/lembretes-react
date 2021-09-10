@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { v4 as uuidv4 } from 'uuid';
-
-import { useAppDispatch as UseAppDispatch, useAppSelector } from "../redux/hooks";
-import { addTask, TypesTasksFilter } from '../core/task-query'
-import { default as TaskItem, } from "./TaskItem";
-import { select } from "../redux/reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+
+import { useAppDispatch as UseAppDispatch, useAppSelector } from "../redux/hooks";
+import { Task, TypesTasksFilter } from '../core/task-query'
+import { default as TaskItem, } from "./TaskItem";
+import { operation } from "../redux/reducer";
+import TaskItemEdit from "./TaskItemEdit";
 
 const Container = styled.div`
     display: flex;
@@ -15,31 +15,32 @@ const Container = styled.div`
 `;
 
 const ButtonAdd = styled.button`
-    margin: 0.6rem;
+    margin: 1rem;
     font-size: 2rem;
     background-color: #fff;
     border: none;
     cursor: pointer;
+    padding: 0px;
 `;
+
+const newTask: Task = {
+    id: '',
+    done: false,
+    name: '',
+    date: null,
+}
 
 export default function TaskList() {
 
-    const tasksFilter = useAppSelector(state => state.menuOptions)
+    const applicationState = useAppSelector(state => state.applicationState)
 
     const dispatch = UseAppDispatch()
 
-    const activedBadge = tasksFilter.find(taskFilter => taskFilter.filter.active)
+    const activedBadge = applicationState.tasksFilter.find(taskFilter => taskFilter.filter.active)
 
     function onAddTask(type: TypesTasksFilter) {
 
-        addTask({
-            id: uuidv4(),
-            done: true,
-            name: 'teste 2 away',
-            date: '2021-08-07',
-        })
-
-        dispatch(select(type))
+        dispatch(operation('adding'))
     }
 
     return <>
@@ -49,10 +50,12 @@ export default function TaskList() {
 
                 {activedBadge.tasks.map((taskItem, index) => <TaskItem key={index} {...taskItem}></TaskItem>)}
 
-                <ButtonAdd onClick={() => onAddTask(activedBadge?.filter.name)}>
+                {applicationState.operation === 'init' && <ButtonAdd onClick={() => onAddTask(activedBadge?.filter.name)}>
 
                     <FontAwesomeIcon icon={faPlusCircle} />
-                </ButtonAdd>
+                </ButtonAdd>}
+
+                {applicationState.operation === 'adding' && <TaskItemEdit {...newTask}></TaskItemEdit>}
             </Container>
             :
             <p>...</p>}

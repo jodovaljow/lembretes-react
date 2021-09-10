@@ -54,10 +54,10 @@ const ButtonDel = styled.button`
 
 export default function TaskItem(task: Task) {
 
-    const menuOptions = useAppSelector(state => state.menuOptions)
+    const applicationState = useAppSelector(state => state.applicationState)
     const dispatch = UseAppDispatch()
 
-    const activedBadge = menuOptions.find(taskFilter => taskFilter.filter.active)
+    const activedBadge = applicationState.tasksFilter.find(taskFilter => taskFilter.filter.active)
 
     function formatDate() {
 

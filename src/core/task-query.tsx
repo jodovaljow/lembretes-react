@@ -6,9 +6,24 @@ import { dateIsTodayAndPast } from "./date-utils";
 function getTasks(): Task[] {
 
     return JSON.parse(window.localStorage.getItem('tasks') ?? '[]')
+        .sort((taskA: Task, taskB: Task) => {
+
+            const dateTaskA: string = taskA.date ?? ''
+            const dateTaskB: string = taskB.date ?? ''
+
+            return dateTaskA.localeCompare(dateTaskB)
+        })
 }
 
-export function getTasksFilter(): TasksFilter[] {
+export function getApplicationStateInit(): ApplicationState {
+
+    return {
+        operation: 'init',
+        tasksFilter: getTasksFilter(),
+    }
+}
+
+function getTasksFilter(): TasksFilter[] {
 
     const tasks: Task[] = getTasks()
 
@@ -64,11 +79,23 @@ export function delTask(taskToDel: Task) {
     setTasks(tasks)
 }
 
+export function editTask(taskToEdit: Task) {
+
+    const tasks: Task[] = getTasks().map(task => task.id === taskToEdit.id ? { ...taskToEdit } : task)
+
+    setTasks(tasks)
+}
+
 export interface Task {
     id: string
     done: boolean
     name: string
     date?: string | null
+}
+
+export interface ApplicationState {
+    operation: TypesOperation,
+    tasksFilter: TasksFilter[],
 }
 
 export interface TasksFilter {
@@ -82,3 +109,4 @@ export interface TasksFilter {
 }
 
 export type TypesTasksFilter = 'Hoje' | 'Programados' | 'Todos'
+export type TypesOperation = 'init' | 'editing' | 'adding'
