@@ -1,8 +1,9 @@
+import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 
 import Badge, { PropsBadge } from "./Badge"
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { select } from "../redux/reducer";
+import { operation, select } from "../redux/reducer";
 import { TasksFilter, TypesTasksFilter } from "../core/task-query";
 
 const Container = styled.div`
@@ -21,6 +22,22 @@ export default function Menu() {
 
     const applicationState = useAppSelector(state => state.applicationState)
     const dispatch = useAppDispatch()
+
+    const escFunction = useCallback((event) => {
+        if (event.keyCode === 27) {
+
+            dispatch(operation({ type: 'init' }))
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+
+        document.addEventListener("keydown", escFunction, false);
+
+        return () => {
+            document.removeEventListener("keydown", escFunction, false);
+        };
+    }, [escFunction]);
 
     function onSelectMenuOption(typesTasksFilter: TypesTasksFilter) {
 
