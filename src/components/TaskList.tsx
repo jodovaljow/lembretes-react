@@ -7,6 +7,7 @@ import { Task, TypesTasksFilter } from '../core/task-query'
 import { default as TaskItem, } from "./TaskItem";
 import { operation } from "../redux/reducer";
 import TaskItemEdit from "./TaskItemEdit";
+import moment from "moment";
 
 const Container = styled.div`
     display: flex;
@@ -23,13 +24,6 @@ const ButtonAdd = styled.button`
     padding: 0px;
 `;
 
-const newTask: Task = {
-    id: '',
-    done: false,
-    name: '',
-    date: null,
-}
-
 export default function TaskList() {
 
     const applicationState = useAppSelector(state => state.applicationState)
@@ -37,6 +31,13 @@ export default function TaskList() {
     const dispatch = UseAppDispatch()
 
     const activedBadge = applicationState.tasksFilter.find(taskFilter => taskFilter.filter.active)
+
+    const newTask: Task = {
+        id: '',
+        done: false,
+        name: '',
+        date: activedBadge?.filter.name === 'Todos' ? null : moment().format('YYYY-MM-DD'),
+    }
 
     function onAddTask(type: TypesTasksFilter) {
 
@@ -50,10 +51,12 @@ export default function TaskList() {
 
                 {activedBadge.tasks.map((taskItem, index) => <TaskItem key={index} {...taskItem}></TaskItem>)}
 
-                {applicationState.operation === 'init' && <ButtonAdd onClick={() => onAddTask(activedBadge?.filter.name)}>
+                {applicationState.operation === 'init' &&
+                    <ButtonAdd onClick={() => onAddTask(activedBadge?.filter.name)}>
 
-                    <FontAwesomeIcon icon={faPlusCircle} />
-                </ButtonAdd>}
+                        <FontAwesomeIcon icon={faPlusCircle} />
+                    </ButtonAdd>
+                }
 
                 {applicationState.operation === 'adding' && <TaskItemEdit {...newTask}></TaskItemEdit>}
             </Container>
