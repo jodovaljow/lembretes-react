@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux';
 
-import Menu from './components/Menu';
+import { TaskList, Menu } from './components';
+
 import store from './redux/store';
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
     <Provider store={store}>
 
       <Menu></Menu>
+      <TaskList></TaskList>
     </Provider>
   );
 }
