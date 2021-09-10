@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useState, } from "react";
+import { BaseSyntheticEvent, KeyboardEventHandler, useState, } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faCircle, } from "@fortawesome/free-regular-svg-icons";
@@ -125,6 +125,14 @@ export default function TaskItemEdit(props: Task) {
         return !task.name.trim()
     }
 
+    function onKeyPressName(event: React.KeyboardEvent) {
+
+        if (event.key === 'Enter') {
+
+            onSaveTask(task)
+        }
+    }
+
     return <Container>
 
         <Checkbox onClick={onCheckboxClick}>
@@ -134,7 +142,7 @@ export default function TaskItemEdit(props: Task) {
         <Content>
             <ContentNameDate>
 
-                <NameInput value={task.name} onChange={onNameChange}></NameInput>
+                <NameInput value={task.name} onChange={onNameChange} onKeyPress={onKeyPressName}></NameInput>
                 <DatePicker onChange={onDateChange} size={"small"} format="LL" locale={ptBr} value={formatDate()} />
             </ContentNameDate>
 
